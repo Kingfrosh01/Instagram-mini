@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instagram Mini</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101114;color:white;font-family:Arial,sans-serif}
+header{padding:18px;display:flex;justify-content:space-between;border-bottom:1px solid #333}
+.logo{font-size:25px;font-weight:bold;background:linear-gradient(45deg,#ffb347,#ff416c,#a855f7);background-clip:text;color:transparent}
+button{background:none;color:white;border:0;font-size:20px;cursor:pointer}
+.stories{display:flex;gap:15px;overflow:auto;padding:18px}
+.story{text-align:center;font-size:12px;min-width:60px}
+.circle{width:57px;height:57px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#ffcc33,#ff416c,#9b51e0);margin:auto auto 6px}
+.circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;border:2px solid #101114}
+.post{margin-bottom:22px;border-bottom:1px solid #303036}
+.posthead{display:flex;align-items:center;gap:10px;padding:12px}
+.avatar{width:36px;height:36px;border-radius:50%;background:#8c42d9;display:grid;place-items:center;font-weight:bold}
+.post img{width:100%;max-height:480px;object-fit:cover}
+.actions{padding:12px;display:flex;gap:17px;font-size:24px}
+.caption{padding:0 13px 15px;font-size:14px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#17181d;border-top:1px solid #333;display:flex;justify-content:space-around;padding:15px}
+.empty{text-align:center;padding:45px 20px;color:#aaa}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">Instagram Mini</div>
+<button onclick="document.getElementById('upload').click()">＋</button>
+</header>
+
+<div class="stories">
+<div class="story"><div class="circle"><img src="https://i.pravatar.cc/100?img=12"></div>Your story</div>
+<div class="story"><div class="circle"><img src="https://i.pravatar.cc/100?img=32"></div>Friends</div>
+<div class="story"><div class="circle"><img src="https://i.pravatar.cc/100?img=47"></div>Explore</div>
+<div class="story"><div class="circle"><img src="https://i.pravatar.cc/100?img=22"></div>Creators</div>
+</div>
+
+<input id="upload" type="file" accept="image/*" hidden onchange="uploadPhoto(event)">
+
+<main id="feed">
+<div class="empty">
+<h2>Welcome to Instagram Mini</h2>
+<p>Share your moments with the world.</p>
+<button onclick="document.getElementById('upload').click()" style="background:#a43bea;padding:12px 22px;border-radius:10px">＋ Create your first post</button>
+</div>
+</main>
+
+<nav>
+<button onclick="showFeed()">⌂</button>
+<button onclick="document.getElementById('upload').click()">＋</button>
+<button onclick="alert('Your profile')">♙</button>
+</nav>
+
+<script>
+function uploadPhoto(e){
+const file=e.target.files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=function(){
+const post=document.createElement('div');
+post.className='post';
+post.innerHTML=`
+<div class="posthead"><div class="avatar">IM</div><b>Instagram Mini User</b></div>
+<img src="${reader.result}">
+<div class="actions">
+<button onclick="like(this)">♡</button>
+<button onclick="comment()">♧</button>
+<button onclick="sharePost()">↗</button>
+</div>
+<div class="caption"><b>Instagram Mini User</b> My new moment ✨</div>`;
+const feed=document.getElementById('feed');
+if(feed.querySelector('.empty'))feed.innerHTML='';
+feed.prepend(post);
+};
+reader.readAsDataURL(file);
+}
+function like(btn){
+btn.innerText=btn.innerText==='♡'?'♥':'♡';
+btn.style.color=btn.innerText==='♥'?'#ff416c':'white';
+}
+function comment(){
+const text=prompt('Write your comment');
+if(text)alert('Comment: '+text);
+}
+function sharePost(){
+if(navigator.share)navigator.share({title:'Instagram Mini',url:location.href});
+else alert('Share this app with your friends!');
+}
+function showFeed(){
+document.getElementById('feed').style.display='block';
+}
+</script>
+</body>
+</html>
